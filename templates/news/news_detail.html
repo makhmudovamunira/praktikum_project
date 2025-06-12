@@ -8,5 +8,10 @@
 <h1>{{news.title}}</h1>
 <p>Published date: {{news.publish_time}}</p>
 <p>{{news.body}}</p>
+
+<div class="card-footer text-center">
+    <a href="/news/{{ news.slug }}/edit/" >Tahrirlash</a>
+    <a href="/news/{{ news.slug }}/delete/">O'chirish</a>
+</div>
 </body>
 </html>

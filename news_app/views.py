@@ -2,11 +2,12 @@ from datetime import timedelta
 import random
 
 from django.db.models import F
+from django.urls import reverse_lazy
 from django.utils import timezone
 
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, DeleteView, UpdateView
 from .forms import ContactForm
 
 from .models import News, Category
@@ -122,3 +123,15 @@ class TexnologyNewsView(ListView):
     context_object_name = 'texnology_news'
     def get_queryset(self):
         return self.model.published.all().filter(category__name='Fan')
+
+
+class NewsUpdateView(UpdateView):
+    model = News
+    fields = ['title', 'body', 'image', 'category', 'status']
+    template_name = 'crud/news_edit.html'
+
+class NewsDeleteView(DeleteView):
+    model = News
+    template_name = 'crud/news_delete.html'
+    success_url = reverse_lazy('home_page')
+
