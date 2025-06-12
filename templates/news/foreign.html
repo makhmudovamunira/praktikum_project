@@ -1,0 +1,64 @@
+{% extends 'news/base.html' %}
+
+{% load static %}
+
+{% block title %}Dunyo Xabarlari {% endblock title %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="text-center mb-4"> Dunyo Xabarlari</h1>
+
+    <div class="row">
+        {% for news in foreign_news %}
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ news.image.url }}" class="card-img-top" alt="{{ news.title }}" style="height: 250px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ news.title }}</h5>
+                    {% if news.body %}
+                    <p class="card-text text-muted">{{ news.body|truncatechars:150 }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="card-footer bg-white">
+                    <a href="{{ news.get_absolute_url }}" class="btn btn-primary">Batafsil o'qish</a>
+                    <small class="text-muted float-end">
+                        {% if news.publish_time %}
+                        {{ news.publish_time|date:"d-m-Y H:i" }}
+                        {% endif %}
+                    </small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .card-title {
+        color: #2c3e50;
+        font-weight: 600;
+    }
+
+    .btn-primary {
+        background-color: #3498db;
+        border-color: #3498db;
+    }
+
+    .btn-primary:hover {
+        background-color: #2980b9;
+        border-color: #2980b9;
+    }
+</style>
+{% endblock content %}
