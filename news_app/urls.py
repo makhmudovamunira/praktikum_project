@@ -3,11 +3,12 @@ from django.urls import path
 from django.conf.urls.static import static
 
 from .views import news_list, news_detail, homepageView, ContactPageView,ViewCategory,\
-    UzNewsView, ForeignNewsView, TexnologyNewsView, SportNewsView, NewsUpdateView,NewsDeleteView
+    UzNewsView, ForeignNewsView, TexnologyNewsView, SportNewsView, NewsUpdateView,NewsDeleteView, NewCreateView
 
 urlpatterns=[
     path('category', ViewCategory.as_view(), name='category_page'),
     path('', homepageView, name='home_page'),
+    path('news/create', NewCreateView.as_view(), name='new_create'),
     path('news/<slug:news>/', news_detail, name='news_detail_page'),
     path('news/<slug>/edit/', NewsUpdateView.as_view(), name='news_update'),
     path('news/<slug>/delete/', NewsDeleteView.as_view(), name='news_delete'),

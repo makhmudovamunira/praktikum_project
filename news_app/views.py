@@ -7,7 +7,8 @@ from django.utils import timezone
 
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import TemplateView, ListView, DeleteView, UpdateView
+from django.utils.text import slugify
+from django.views.generic import TemplateView, ListView, DeleteView, UpdateView, CreateView
 from .forms import ContactForm
 
 from .models import News, Category
@@ -134,4 +135,17 @@ class NewsDeleteView(DeleteView):
     model = News
     template_name = 'crud/news_delete.html'
     success_url = reverse_lazy('home_page')
+
+
+class NewCreateView(CreateView):
+    model = News
+    template_name = 'crud/news_create.html'
+    fields = ('title', 'slug', 'body', 'image', 'category', 'status')
+    success_url =reverse_lazy('home_page')
+
+    def form_valid(self, form):
+        # Agar slug kiritilmagan bo'lsa, avtomatik yaratamiz
+        if not form.instance.slug:
+            form.instance.slug = slugify(form.instance.title)  # title field asosida
+        return super().form_valid(form)
 
