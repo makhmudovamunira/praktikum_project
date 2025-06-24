@@ -1,3 +1,5 @@
+from contextlib import nullcontext
+
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
@@ -8,13 +10,15 @@ def user_login(request):
     if request.method == 'POST':
         form=LoginForm(request.POST)
         if form.is_valid():
-            data = form.cleaned_data()
+            data = form.cleaned_data
+            print(data)
             user = authenticate(request,
                                 username=data['username'],
                                 password=data['password'])
+            print(user)
 
             if user is not None:
-                if user.is_active():
+                if user.is_active:
                     login(request, user)
                     return HttpResponse('Muvaffaqiyatli login amalga oshirildi!')
                 else:
@@ -26,4 +30,4 @@ def user_login(request):
         context={
             'form':form
         }
-        return render(request, 'account/login.html', context)
+    return render(request, 'registration/login.html', context)
