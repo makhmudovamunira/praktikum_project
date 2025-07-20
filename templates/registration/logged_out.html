@@ -5,14 +5,8 @@
 {% block content %}
     <h2>Veb saytdan chiqish - logout</h2>
 
-    {% if not request.user.is_authenticated %}
-        <p>Siz allaqachon chiqib bo‘ldingiz. <a href="{% url 'login' %}">Qaytadan kirish</a></p>
-    {% else %}
-        <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Chiqish</button>
-        </form>
-        <p>Agar chiqmasangiz, <a href="{% url 'home' %}">bosh sahifaga qaytishingiz</a> mumkin.</p>
-    {% endif %}
-
+    <form action="{% url 'logout' %}" method="post">
+      {% csrf_token %}
+      <button type="submit" style="color:black">Chiqish</button>
+    </form>
 {% endblock content %}

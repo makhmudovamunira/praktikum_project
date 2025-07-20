@@ -1,0 +1,74 @@
+{% extends 'news/base.html' %}
+{% load static %}
+{% block title %}Foydalanuvchi ma'lumotlarini o'zgartirish{% endblock title %}
+
+{% block content %}
+<style>
+    .edit-profile-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 30px;
+        background-color: #fdfdfd;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .edit-profile-container h1 {
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: 24px;
+    }
+
+    .edit-profile-container p {
+        text-align: center;
+        color: #666;
+        margin-bottom: 25px;
+    }
+
+    .edit-profile-container label {
+        font-weight: bold;
+        display: block;
+        margin-top: 10px;
+    }
+
+    .edit-profile-container input,
+    .edit-profile-container select,
+    .edit-profile-container textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        background-color: #fff;
+    }
+
+    .edit-profile-container button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 20px;
+        background-color: #2ecc71;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .edit-profile-container button:hover {
+        background-color: #27ae60;
+    }
+</style>
+
+<div class="edit-profile-container">
+    <h1>Foydalanuvchi ma'lumotlarini o‘zgartirish</h1>
+    <p>Siz ma'lumotlaringizni quyidagi forma orqali o‘zgartirishingiz mumkin.</p>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ user_form.as_p }}
+        {{ profile_form.as_p }}
+        <button type="submit">Tahrirlash</button>
+    </form>
+</div>
+{% endblock content %}

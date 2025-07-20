@@ -1,6 +1,8 @@
 from datetime import timedelta
 import random
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import F
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -10,7 +12,7 @@ from django.shortcuts import render, get_object_or_404
 from django.utils.text import slugify
 from django.views.generic import TemplateView, ListView, DeleteView, UpdateView, CreateView
 from .forms import ContactForm
-
+from config.custom_permissions import OnlyLoggedSuperUser
 from .models import News, Category
 
 # Create your views here.
@@ -24,6 +26,7 @@ def news_list(request):
     }
 
     return render(request, 'news/news_list.html', context=context)
+
 
 def news_detail(request, news):
     news=get_object_or_404(News, slug=news,status=News.Status.Published)
@@ -126,18 +129,18 @@ class TexnologyNewsView(ListView):
         return self.model.published.all().filter(category__name='Fan')
 
 
-class NewsUpdateView(UpdateView):
+class NewsUpdateView(OnlyLoggedSuperUser ,UpdateView):
     model = News
     fields = ['title', 'body', 'image', 'category', 'status']
     template_name = 'crud/news_edit.html'
 
-class NewsDeleteView(DeleteView):
+class NewsDeleteView(OnlyLoggedSuperUser ,DeleteView):
     model = News
     template_name = 'crud/news_delete.html'
     success_url = reverse_lazy('home_page')
 
 
-class NewCreateView(CreateView):
+class NewCreateView(OnlyLoggedSuperUser ,CreateView):
     model = News
     template_name = 'crud/news_create.html'
     fields = ('title', 'slug', 'body', 'image', 'category', 'status')

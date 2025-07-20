@@ -1,13 +1,54 @@
 {% extends 'news/base.html' %}
 {% load static %}
-{% block title %} Yangiliklarni o'chirish {% endblock title %}
+{% block title %}Yangilikni o‘chirish{% endblock title %}
 
 {% block content %}
+<style>
+    .delete-news-container {
+        max-width: 600px;
+        margin: 80px auto;
+        padding: 30px;
+        background-color: #fff0f0;
+        border: 1px solid #f5c6cb;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(255, 0, 0, 0.1);
+        text-align: center;
+    }
 
-<h2 class="text-center">Yangilikni o'chirish</h2>
-<form method="post">{%csrf_token%}
-    <p>{{news.title }} yangilikni o'chirmoqchimisz</p>
-    <button type="submit" class="btn btn-danger md-2">Tasdiqlash</button>
-</form>
+    .delete-news-container h2 {
+        color: #c0392b;
+        margin-bottom: 20px;
+    }
 
+    .delete-news-container p {
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 30px;
+    }
+
+    .delete-news-container button {
+        background-color: #e74c3c;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        font-size: 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .delete-news-container button:hover {
+        background-color: #c0392b;
+    }
+</style>
+
+<div class="delete-news-container">
+    <h2>⚠️ Yangilikni o‘chirish</h2>
+    <p><strong>"{{ news.title }}"</strong> yangiligini o‘chirmoqchimisiz?</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Ha, o‘chirish</button>
+    </form>
+</div>
 {% endblock content %}

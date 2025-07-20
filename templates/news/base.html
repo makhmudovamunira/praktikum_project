@@ -113,14 +113,15 @@
                                     </nav>
                                 </div>
                             </div>
-                            <div class="col-xl-2 col-lg-2 col-md-4">
-                                <div class="header-right-btn f-right d-none d-lg-block">
-                                    <i class="fas fa-search special-tag"></i>
-                                    <div class="search-box">
-                                        <form action="#">
-                                            <input type="text" placeholder="Search">
+                            <div class="col-xl-2 col-lg-2 col-md-4 ">
+                                <div class="header-right-btn f-right d-none d-lg-block" style="display: flex; align-items: center; gap: 20px;">
+                                    <div>
+                                        {% if request.user.is_authenticated %}
 
-                                        </form>
+                                        <p><a href="{% url 'user_profile' %}" style="   color: red; text-decoration: none;">My profile</a></p>
+                                        {% else %}
+                                        <a href="{% url 'login' %}" style="color: red; text-decoration: none;">Sign in</a>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>

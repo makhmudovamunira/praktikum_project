@@ -1,11 +1,65 @@
 {% extends 'news/base.html' %}
 {% load static %}
-{% block title %} Yangilik qo'shish {% endblock title %}
+{% block title %}Yangilik qo‘shish{% endblock title %}
 
 {% block content %}
-<h2 class="text-center">Yangilik qo'shish</h2>
-<form method="post" enctype="multipart/form-data">{%csrf_token%}
-    {{form.as_p}}
-    <button type="submit" class="btn btn-info md-2">Qo'shish</button>
-</form>
+<style>
+    .add-news-container {
+        max-width: 700px;
+        margin: 50px auto;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    .add-news-container h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #2c3e50;
+    }
+
+    .add-news-container label {
+        font-weight: bold;
+        margin-top: 10px;
+        display: block;
+    }
+
+    .add-news-container input,
+    .add-news-container textarea,
+    .add-news-container select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        background-color: #f9f9f9;
+    }
+
+    .add-news-container button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 20px;
+        background-color: #27ae60;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .add-news-container button:hover {
+        background-color: #1e8449;
+    }
+</style>
+
+<div class="add-news-container">
+    <h2>📰 Yangilik qo‘shish</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Qo‘shish</button>
+    </form>
+</div>
 {% endblock content %}
