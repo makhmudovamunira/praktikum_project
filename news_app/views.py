@@ -1,17 +1,22 @@
 from datetime import timedelta
 import random
 
+from hitcount.utils import get_hitcount_model
+from hitcount.views import HitCountDetailView, HitCountMixin
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import F
+from django.db.models import F, Q
+from django.template.defaultfilters import title
 from django.urls import reverse_lazy
 from django.utils import timezone
 
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils.text import slugify
+from django.utils.translation.trans_real import activate
 from django.views.generic import TemplateView, ListView, DeleteView, UpdateView, CreateView
-from .forms import ContactForm
+from .forms import ContactForm, CommentForm
 from config.custom_permissions import OnlyLoggedSuperUser
 from .models import News, Category
 
@@ -28,13 +33,48 @@ def news_list(request):
     return render(request, 'news/news_list.html', context=context)
 
 
-def news_detail(request, news):
+def news_detail(request, news, context=None):
     news=get_object_or_404(News, slug=news,status=News.Status.Published)
+    # hit orqali ko'rishlar sonini aniqlash
+    hit_count = get_hitcount_model().objects.get_for_object(news)
+    hits = hit_count.hits
+    context={}
+    hitcontext = context['hit_count'] = {'pk': hit_count.pk}
+    hit_count_response = HitCountMixin.hit_count(request, hit_count)
+    if hit_count_response.hit_counted:
+        hits = hits + 1
+        hitcontext['hit_counted'] = hit_count_response.hit_counted
+        hitcontext['hit_message'] = hit_count_response.hit_message
+        hitcontext['total_hits'] = hits
+
+
+
+    comment=news.comments.filter(activate=True)
+    comment_count=comment.count()
+    new_comment=None
+    if request.method=='POST':
+        comment_form=CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            #yangi comment obyetkini yaratamzi lekin db ga saqlamaymiz
+            new_comment = comment_form.save(commit=False)
+            new_comment.news=news
+            #commentariya egasini tanladik
+            new_comment.user=request.user
+            #malumotlar bazasiga saqlaymiz
+            new_comment.save()
+            comment_form=CommentForm()
+
+    else:
+        comment_form=CommentForm
 
     News.objects.filter(pk=news.pk).update(view_count=F('view_count')+1)
     news.refresh_from_db()
     context={
-        'news':news
+        'news':news,
+        'comments':comment,
+        'new_comment':new_comment,
+        'comment_form':comment_form,
+        'comment_count':comment_count,
     }
     return render(request, 'news/news_detail.html', context=context)
 
@@ -152,3 +192,15 @@ class NewCreateView(OnlyLoggedSuperUser ,CreateView):
             form.instance.slug = slugify(form.instance.title)  # title field asosida
         return super().form_valid(form)
 
+
+class SearchResultView(ListView):
+    model = News
+    template_name = 'news/search_result.html'
+    context_object_name = 'all_news'
+
+
+    def get_queryset(self):
+        query=self.request.GET.get('q')
+        return News.objects.filter(
+            Q(title__icontains=query) | Q(body__icontains=query)
+        )

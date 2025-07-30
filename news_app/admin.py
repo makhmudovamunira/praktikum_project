@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import News, Category, Contact
+from django.utils.timezone import activate
+
+from .models import News, Category, Contact, Comment
 
 # Register your models here.
 @admin.register(News)
@@ -15,5 +17,22 @@ class NewsAdmin(admin.ModelAdmin):
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
 
-
 admin.site.register(Contact)
+
+
+#2-usul
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ['user', 'body', 'created_time', 'activate']
+    list_filter = ['activate', 'body']
+    search_fields = ['user', 'body']
+    actions=['disabled_comments', 'activate_comments']
+
+    def disable_comments(self, request, queryset):
+        queryset.update(activate=False)
+
+    def activate_comments(self, request, queryset):
+        queryset.update(activate=True)
+
+#1-usul
+#admin.site.register(Comment, CommentAdmin)

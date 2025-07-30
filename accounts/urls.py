@@ -2,6 +2,7 @@ from django.urls import path
 from .views import user_login, dashboard_view, user_register,SignUpView, edit_user, EditUserView
 from django.contrib.auth.views import LoginView, LogoutView,PasswordChangeView, PasswordChangeDoneView
 from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView, PasswordResetDoneView,PasswordResetCompleteView
+from .views import admin_page_view
 
 
 urlpatterns=[
@@ -19,4 +20,5 @@ urlpatterns=[
     # path('sign_up/', SignUpView.as_view()   , name='user_register'),
     path('profile/edit/', edit_user, name='profile_edit_infos'),
     # path('profile/edit/', EditUserView.as_view(), name='profile_edit_infos'),
+    path('adminpage/', admin_page_view, name='admin_page'),
 ]

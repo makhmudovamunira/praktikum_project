@@ -3,7 +3,7 @@ from django.urls import path
 from django.conf.urls.static import static
 
 from .views import news_list, news_detail, homepageView, ContactPageView,ViewCategory,\
-    UzNewsView, ForeignNewsView, TexnologyNewsView, SportNewsView, NewsUpdateView,NewsDeleteView, NewCreateView
+    UzNewsView, ForeignNewsView, TexnologyNewsView, SportNewsView, NewsUpdateView,NewsDeleteView, NewCreateView, SearchResultView
 
 urlpatterns=[
     path('category', ViewCategory.as_view(), name='category_page'),
@@ -18,6 +18,7 @@ urlpatterns=[
     path('foreign-news/', ForeignNewsView.as_view(), name='foreign_news_page'),
     path('sport-news/', SportNewsView.as_view(), name='sport_news_page'),
     path('fan-news/', TexnologyNewsView.as_view(), name='fan_news_page'),
+    path('searchresult/', SearchResultView.as_view(), name='search_result'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

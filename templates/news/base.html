@@ -99,15 +99,14 @@
                                             <li><a href="{% url 'foreign_news_page' %}">Jaxon</a></li>
                                             <li><a href="{% url 'sport_news_page' %}">Sport</a></li>
                                             <li><a href="{% url 'fan_news_page' %}">Texnologiya</a></li>
-                                            <li><a href="about.html">About</a></li>
                                             <li><a href="{% url 'contact_page' %}">Contact</a></li>
-                                            <li><a href="#">Pages</a>
-                                                <ul class="submenu">
-                                                    <li><a href="elements.html">Element</a></li>
-                                                    <li><a href="blog.html">Blog</a></li>
-                                                    <li><a href="single-blog.html">Blog Details</a></li>
-                                                    <li><a href="details.html">Categori Details</a></li>
-                                                </ul>
+                                            {% if user.is_authenticated and  user.is_superuser%}
+                                             <li><a href="#">Biz bilan alqoa</a></li>
+                                            {% endif %}
+                                            <li>
+                                                <form method="get" action="{% url 'search_result' %}">
+                                                    <input type="search" name="q" placeholder="Qidiruv..." class="form-control">
+                                                </form>
                                             </li>
                                         </ul>
                                     </nav>
@@ -117,10 +116,14 @@
                                 <div class="header-right-btn f-right d-none d-lg-block" style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         {% if request.user.is_authenticated %}
-
-                                        <p><a href="{% url 'user_profile' %}" style="   color: red; text-decoration: none;">My profile</a></p>
+                                        <form action="{% url 'logout' %}" method="post">
+                                          {% csrf_token %}
+                                          <button type="submit" style="background:none; border:none; padding:0; color:#00FF00; cursor:pointer; font-weight:bold">Logout</button>
+                                        </form>
+                                        <p><a href="{% url 'user_profile' %}" style="   color: red; text-decoration: none; font-weight:bold">My profile</a></p>
                                         {% else %}
-                                        <a href="{% url 'login' %}" style="color: red; text-decoration: none;">Sign in</a>
+                                        <a href="{% url 'login' %}" style="color: red; text-decoration: none; font-weight:bold;">Sign in</a><br>
+                                        <a href="{% url 'user_register' %}"  style="background:none; border:none; padding:0; color:#00FF00; cursor:pointer; font-weight:bold">Sign up</a>
                                         {% endif %}
                                     </div>
                                 </div>
