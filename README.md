@@ -16,8 +16,7 @@ Bu loyiha mening **birinchi Django frameworkida yaratgan yangiliklar portalim** 
 
 - **Backend:** Django (Python)
 - **Frontend:** HTML, CSS, Bootstrap
-- **Ma’lumotlar bazasi:** SQLite (lokal) / PostgreSQL (serverda)
-- **Deploy:** Render.com (bepul va doimiy hosting)
+- **Ma’lumotlar bazasi:** SQLite (lokal) 
 
 ## 🚀 Ishga tushurish (localda)
 
