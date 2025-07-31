@@ -82,7 +82,7 @@ def homepageView(request):
     news_list = News.published.all().order_by('-publish_time')[:8]
     categories=Category.objects.all()
 
-    one_week_ago=timezone.now()-timedelta(days=15)
+    one_week_ago=timezone.now()-timedelta(days=1000)
     weekly_news=News.published.filter(publish_time__gte=one_week_ago).order_by('-publish_time')[:6]
 
     # Oxirgi 15 ta yangilikni olamiz

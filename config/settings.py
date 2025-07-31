@@ -11,9 +11,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 from django.conf.global_settings import MEDIA_URL, MEDIA_ROOT, STATICFILES_DIRS, STATIC_ROOT, STATICFILES_FINDERS, \
-    LOGIN_REDIRECT_URL, LOGOUT_REDIRECT_URL, EMAIL_BACKEND
+    LOGIN_REDIRECT_URL, LOGOUT_REDIRECT_URL, EMAIL_BACKEND, LANGUAGES, LOCALE_PATHS
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,12 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-daf3p)@+!rya1%bxwi$t^^z_#g0_f0lhv3_15sczi$a2=pgxk%'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -43,11 +44,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'news_app',
     'hitcount',
+    'modeltranslation',
+    'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -109,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'uz-uz'
 
 TIME_ZONE = 'Asia/Tashkent'
 
@@ -117,11 +122,24 @@ USE_I18N = True
 
 USE_TZ = True
 
+from django.utils.translation import gettext_lazy as _
+
+LANGUAGES=[
+    ('uz', _('Uzbek')),
+    ('en',_('English')),
+    ('ru', _('Russian'))
+]
+
+MODELTRANSLATION_DEFAULT_LANGUAGE='uz'
+
+LOCALE_PATHS = BASE_DIR, 'locale'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
+#localda ishlatish uchun edi
 STATICFILES_DIRS=[BASE_DIR/'static']
 STATIC_ROOT=BASE_DIR/'staticfiles'
 STATICFILES_FINDERS=[
@@ -134,6 +152,8 @@ STATICFILES_FINDERS=[
 import os
 
 MEDIA_URL = '/media/'
+
+#local uchun edi
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
@@ -147,3 +167,5 @@ LOGOUT_REDIRECT_URL='home_page'
 EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend'
 
 LOGIN_URL='login'
+
+STATICFILES_STORAGE=('whitenoise.storage.CompressedManifestStaticFilesStorage')
